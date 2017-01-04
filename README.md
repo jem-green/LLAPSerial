@@ -1,17 +1,20 @@
-This Arduino library is under development, however feel free to try it out.
+This Arduino library was forked from ciseco
 
-It is designed to assist the user in implementing a LLAP device using the Arduino development environment.
-
-For more infomation see http://openmicros.org/index.php/articles/85-llap-lightweight-local-automation-protocol/266-arduino-llap-library-for-user-devices
+Modifications made to support the way the CCB sensors operate.
 
 Installing
 
-* On https://github.com/CisecoPlc/LLAPSerial at the bottom right you will find a button called "dowload zip"
+* On https://github.com/jem-green/LLAPSerial at the bottom right you will find a button called "dowload zip"
 * Extracting this zip will give you a folder called LLAPSerial-master 
 * Rename this to LLAPSerial
-* Move this to your libraries folder inside your arduino sketchbook. On windows this would be something like C:\Users\miles\Documents\Arduino\libraries\LLAPSerial
+* Move this to your libraries folder inside your arduino sketchbook. On windows this would be something like C:\Users\{user}\Documents\Arduino\libraries\LLAPSerial
 * Restart the IDE
 * Examples can then be found under File->Examples->LLAPSerial
 
-Please ask any questions on our forums at http://openmicros.org/
+ On https://github.com/jem-green/sleeper at the bottom right you will find a button called "dowload zip"
+* Extracting this zip will give you a folder called sleeper-master 
+* Rename this to sleeper
+* Move this to your libraries folder inside your arduino sketchbook. On windows this would be something like C:\Users\{user}\Documents\Arduino\libraries\sleeper
+* Restart the IDE
+* Examples can then be found under File->Examples->sleeper
 
