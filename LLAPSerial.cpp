@@ -118,7 +118,25 @@ void LLAPSerial::sendMessage(char* sToSend, char* valueToSend)
     Serial.flush();
 }
 
-// This appears to enable flag memeory to be used rathe than program !
+void LLAPSerial::sendMessage(String sToSend, char* valueToSend)
+{
+    cMessage[0] = 'a';
+    cMessage[1] = deviceId[0];
+    cMessage[2] = deviceId[1];
+    for (byte i = 0; i<9; i++) {
+		if (i < sToSend.length())
+			cMessage[i+3] = sToSend.charAt(i);
+		else if (i < sToSend.length() + strlen(valueToSend))
+			cMessage[i+3] = valueToSend[i - sToSend.length()];
+		else
+			cMessage[i+3] = '-';
+    }
+
+    Serial.print(cMessage);
+    Serial.flush();
+}
+
+// This appears to enable flag memeory to be used rather than program !
 
 void LLAPSerial::sendMessage(const __FlashStringHelper *ifsh)
 {
@@ -157,7 +175,13 @@ void LLAPSerial::sendMessage(const __FlashStringHelper *ifsh, char* valueToSend)
 
 void LLAPSerial::sendInt(String sToSend, int value)
 {
-	char cValue[7];		// long enough for -32767 and the trailing zero
+    //           111    
+	// 0123456789012
+	// aAA0123456789
+	// aAA-32767----
+	// aAA32768-----
+	
+	char cValue[7];		// long enough for -32767 to 32768 and the trailing zero
 	itoa(value, cValue,10);
 	byte cValuePtr = 0;
 
@@ -172,14 +196,19 @@ void LLAPSerial::sendInt(String sToSend, int value)
 		else
 			cMessage[i+3] = '-';
     }
-
     Serial.print(cMessage);
     Serial.flush();
 }
 
 void LLAPSerial::sendIntWithDP(String sToSend, int value, byte decimalPlaces)
 {
-	char cValue[8];		// long enough for -3276.7 and the trailing zero
+    //           111    
+	// 0123456789012
+	// aAA0123456789
+	// aAA-3276.7---
+	// aAA3276.8----
+	
+	char cValue[8];		// long enough for -3276.7 to 3276.8 and the trailing zero
 	byte cValuePtr=0;
 	itoa(value, cValue,10);
 	char* cp = &cValue[strlen(cValue)];
@@ -201,7 +230,59 @@ void LLAPSerial::sendIntWithDP(String sToSend, int value, byte decimalPlaces)
 		else
 			cMessage[i+3] = '-';
     }
+    Serial.print(cMessage);
+    Serial.flush();
+}
 
+void LLAPSerial::sendIntWithPad(String sToSend, int value, byte length)
+{
+	//           111
+	// 0123456789012
+	// aAAcccc-32767
+	// aAAcccc000327
+	
+	char cValue[7];		// long enough for -32767 to 32768 and the trailing zero
+	itoa(value, cValue,10);
+	byte cValuePtr = 0;
+
+    cMessage[0] = 'a';cMessage[1] = deviceId[0];
+    cMessage[2] = deviceId[1];
+    for (byte i = 0; i<9; i++) {
+		if (i < sToSend.length())
+			cMessage[i+3] = sToSend.charAt(i);
+		else if (i < sToSend.length() + length - strlen(cValue))		
+			cMessage[i+3] = '0';
+		else if (cValuePtr < 7 && cValue[cValuePtr] !=0)
+			cMessage[i+3] = cValue[cValuePtr++];
+		else
+			cMessage[i+3] = '-';
+    }
+    Serial.print(cMessage);
+    Serial.flush();
+}
+
+void LLAPSerial::sendIntWithTerminator(String sToSend, int value, byte length, char terminator)
+{
+	//           111    
+	// 0123456789012
+	// aAA0123456789
+	// aAA-32767----
+	
+	char cValue[7];		// long enough for -32767 to 32768 and the trailing zero
+	itoa(value, cValue,10);
+	byte cValuePtr = 0;
+
+    cMessage[0] = 'a';
+    cMessage[1] = deviceId[0];
+    cMessage[2] = deviceId[1];
+    for (byte i = 0; i<9; i++) {
+		if (i < sToSend.length())
+			cMessage[i+3] = sToSend.charAt(i);
+		else if (cValuePtr < 7 && cValue[cValuePtr] !=0)
+			cMessage[i+3] = cValue[cValuePtr++];
+		else
+			cMessage[i+3] = '-';
+    }
     Serial.print(cMessage);
     Serial.flush();
 }

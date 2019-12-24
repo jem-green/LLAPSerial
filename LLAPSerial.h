@@ -22,12 +22,15 @@
 			boolean bMsgReceived;
 			void SerialEvent();
 			void sendMessage(String sToSend);
+			void sendMessage(String sToSend, char* valueToSend);
 			void sendMessage(char* sToSend);
 			void sendMessage(char* sToSend, char* valueToSend);
 			void sendMessage(const __FlashStringHelper *ifsh);
 			void sendMessage(const __FlashStringHelper *ifsh, char* valueToSend);
 			void sendInt(String sToSend, int value);
 			void sendIntWithDP(String sToSend, int value, byte decimalPlaces);
+			void sendIntWithPad(String sToSend, int value, byte length);
+			void sendIntWithTerminator(String sToSend, int value, byte length, char terminator);
 			void setDeviceId(char* cId);
 	};
 
