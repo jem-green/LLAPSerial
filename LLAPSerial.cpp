@@ -90,7 +90,6 @@ void LLAPSerial::sendMessage(String sToSend)
 		else
 			cMessage[i+3] = '-';
     }
-
     Serial.print(cMessage);
     Serial.flush();
 }
@@ -113,7 +112,6 @@ void LLAPSerial::sendMessage(char* sToSend, char* valueToSend)
 		else
 			cMessage[i+3] = '-';
     }
-
     Serial.print(cMessage);
     Serial.flush();
 }
@@ -131,7 +129,6 @@ void LLAPSerial::sendMessage(String sToSend, char* valueToSend)
 		else
 			cMessage[i+3] = '-';
     }
-
     Serial.print(cMessage);
     Serial.flush();
 }
@@ -278,8 +275,12 @@ void LLAPSerial::sendIntWithTerminator(String sToSend, int value, byte length, c
     for (byte i = 0; i<9; i++) {
 		if (i < sToSend.length())
 			cMessage[i+3] = sToSend.charAt(i);
+		else if (i < sToSend.length() + length - strlen(cValue))		
+			cMessage[i+3] = '0';
 		else if (cValuePtr < 7 && cValue[cValuePtr] !=0)
 			cMessage[i+3] = cValue[cValuePtr++];
+		else if (cValue[cValuePtr] == 0)
+			cMessage[i+3] = terminator;
 		else
 			cMessage[i+3] = '-';
     }
